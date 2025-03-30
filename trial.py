@@ -1,5 +1,6 @@
 import time
 from datetime import date
+import random
 
 class Block:
     def __init__(self, index, date, timestamp, data, previous_hash, nonce=0):
@@ -34,15 +35,18 @@ class Block:
         block_string = f"{self.index}/{self.date}/{self.timestamp}/{self.data}/{self.previous_hash}/{self.nonce}"
         
         # Create a hash value based on the block string and nonce
-        hash_value = sum(ord(char) for char in block_string) + self.nonce
+        hash_value = sum(ord(char) for char in block_string) 
+        hash_value = hash_value + int(bin(hash_value)[2:])
+        hash_value = hash_value + int(hex(random.randint(10,100))[2:]) + self.nonce
         
         # Convert to hexadecimal-like format (letters + numbers)
         hash_hex = hex(hash_value)[2:]  # Remove '0x' prefix
         
         # Ensure the hash is at least 5 characters long, padded with leading zeros if necessary
-        hash_hex = hash_hex.zfill(5)  # Pad with leading zeros to ensure length of 5
+        # hash_hex = hash_hex.zfill(5)  # Pad with leading zeros to ensure length of 5
         
-        return hash_hex[-5:]  # Return the last 5 characters
+        # return hash_hex[-5:]  # Return the last 5 characters
+        return hash_hex
 
 class Blockchain:
     # def __init__(self, difficulty=2):
@@ -105,7 +109,7 @@ blockchain = Blockchain(difficulty=2)  # Create a blockchain with a difficulty l
 
 # Add new blocks
 blockchain.add_block("Transaction 1: Alice sends Bob 10 coins")
-# blockchain.add_block("Transaction 2: Bob sends Charlie 5 coins")
+blockchain.add_block("Transaction 2: Bob sends Charlie 5 coins")
 blockchain.add_block("i love peanuts")
 blockchain.add_block("OK")
 

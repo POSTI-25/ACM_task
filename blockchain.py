@@ -93,7 +93,7 @@ class Blockchain:
 
     def print_blockchain(self):
         """Print details of all blocks in the blockchain"""
-        print("\n🔗 Blockchain:")
+        print("\n Blockchain:")
         for block in self.chain:
             print(f"Index: {block.index}, Hash: {block.current_hash}, Previous Hash: {block.previous_hash}, Nonce: {block.nonce}")
         print("\n")
