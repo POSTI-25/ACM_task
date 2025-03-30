@@ -106,7 +106,7 @@ blockchain = Blockchain(difficulty=2)  # Create a blockchain with a difficulty l
 # Add new blocks
 blockchain.add_block("Transaction 1: Alice sends Bob 10 coins")
 blockchain.add_block("Transaction 2: Bob sends Charlie 5 coins")
-blockchain.add_block("Transaction 3 - charlie spent 2 bits")
+blockchain.add_block("i love peanuts")
 blockchain.add_block("OK")
 
 # Print the blockchain
