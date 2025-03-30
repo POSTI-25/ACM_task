@@ -1,4 +1,5 @@
 import time
+import random
 from datetime import date
 
 class Block:
@@ -11,49 +12,31 @@ class Block:
         self.nonce = nonce
         self.current_hash = self.compute_hash()  # Compute hash when block is created
 
-    # def compute_hash(self):
-    #     """
-    #     Custom hash function: Generates a simple hash using the block's attributes.
-    #     """
-    #     block_string = f"{self.index}/{self.date}/{self.timestamp}/{self.data}/{self.previous_hash}/{self.nonce}"
-        
-    #     # Simple hash logic: sum of ASCII values of characters + nonce
-    #     hash_value = sum(ord(char) for char in block_string) + self.nonce
-        
-    #     # Convert to hexadecimal-like format (letters + numbers)
-    #     hash_hex = hex(hash_value)[2:]  # Remove '0x' prefix
-        
-    #     # Ensure the hash is 5 characters long, padded with leading zeros if necessary
-    #     hash_hex = hash_hex.zfill(5)  # Pad with leading zeros to ensure length of 5
-        
-    #     return hash_hex[-5:]  # Return the last 5 characters
     def compute_hash(self):
         """
-        Custom hash function: Generates a more complex hash using the block's attributes.
+        Custom hash function: Generates a hexadecimal-like hash using bitwise operations.
         """
         block_string = f"{self.index}/{self.date}/{self.timestamp}/{self.data}/{self.previous_hash}/{self.nonce}"
         
-        # Create a hash value based on the block string and nonce
-        hash_value = sum(ord(char) for char in block_string) + self.nonce
-        
+        # Print the raw block string
+        print("Block String:", block_string)
+
+        # Custom hashing logic
+        hash_value = random.randint(0, 111)
+        for char in block_string:
+            hash_value = hash_value + ord(char)  # Shift & Mix
+            hash_value = hash_value + int(bin(random.randint(100, 200))[2:])
+
         # Convert to hexadecimal-like format (letters + numbers)
-        hash_hex = hex(hash_value)[2:]  # Remove '0x' prefix
-        
-        # Ensure the hash is at least 5 characters long, padded with leading zeros if necessary
-        hash_hex = hash_hex.zfill(5)  # Pad with leading zeros to ensure length of 5
-        
-        return hash_hex[-5:]  # Return the last 5 characters
+        return hex(hash_value)[2:]  # Remove '0x' prefix
+
 
 class Blockchain:
-    # def __init__(self, difficulty=2):
-    #     """Initialize the blockchain with the Genesis Block and set difficulty level"""
-    #     self.chain = []  # List to store blocks
-    #     self.difficulty = difficulty  # Difficulty level for Proof of Work
-    #     self.create_genesis_block()  # First block
-    def __init__(self, difficulty=2):  # Set difficulty to 2 or 3
-        self.chain = []
-        self.difficulty = difficulty
-        self.create_genesis_block()
+    def __init__(self, difficulty=2):
+        """Initialize the blockchain with the Genesis Block and set difficulty level"""
+        self.chain = []  # List to store blocks
+        self.difficulty = difficulty  # Difficulty level for Proof of Work
+        self.create_genesis_block()  # First block
 
     def create_genesis_block(self):
         """Manually create the first block (Genesis Block)"""
@@ -65,14 +48,6 @@ class Blockchain:
         """Return the last block in the chain"""
         return self.chain[-1]
 
-    # def proof_of_work(self, block):
-    #     """Find a nonce that produces a hash with the required number of leading zeros"""
-    #     while True:
-    #         block.current_hash = block.compute_hash()
-    #         if block.current_hash.startswith('0' * self.difficulty):
-    #             print(f"Proof of Work found: Nonce = {block.nonce}, Hash = {block.current_hash}")
-    #             return block.current_hash
-    #         block.nonce += 1  # Increment nonce and try again
     def proof_of_work(self, block):
         """Find a nonce that produces a hash with the required number of leading zeros"""
         while True:
@@ -106,8 +81,6 @@ blockchain = Blockchain(difficulty=2)  # Create a blockchain with a difficulty l
 # Add new blocks
 blockchain.add_block("Transaction 1: Alice sends Bob 10 coins")
 blockchain.add_block("Transaction 2: Bob sends Charlie 5 coins")
-blockchain.add_block("Transaction 3 - charlie spent 2 bits")
-blockchain.add_block("OK")
 
 # Print the blockchain
 blockchain.print_blockchain()
